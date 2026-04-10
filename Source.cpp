@@ -1,4 +1,4 @@
-##include <iostream>
+#include <iostream>
 #include <string>
 #include <Windows.h>
 
@@ -11,7 +11,8 @@ protected:
 
 public:
     Animal(const std::string& n, const std::string& s, int a, double w)
-        : name(n), species(s), age(a), weight(w) {}
+        : name(n), species(s), age(a), weight(w) {
+    }
 
     virtual void makeSound() const {
         std::cout << name << " Издает звук." << std::endl;
@@ -27,7 +28,7 @@ public:
     virtual ~Animal() {}
 };
 
-// 🔥 ВАЖНО: virtual наследование
+
 class Cat : virtual public Animal {
 protected:
     std::string color;
@@ -38,7 +39,8 @@ public:
     Cat(const std::string& n, int a, double w,
         const std::string& c, int l, bool lazy)
         : Animal(n, "Кошка", a, w),
-          color(c), lives(l), isLazy(lazy) {}
+        color(c), lives(l), isLazy(lazy) {
+    }
 
     void meow() const {
         std::cout << name << " Мяукает." << std::endl;
@@ -57,9 +59,10 @@ protected:
 
 public:
     Bird(const std::string& n, int a, double w,
-         double ws, bool fly, const std::string& h)
+        double ws, bool fly, const std::string& h)
         : Animal(n, "Птица", a, w),
-          wingSpan(ws), canFly(fly), habitat(h) {}
+        wingSpan(ws), canFly(fly), habitat(h) {
+    }
 
     void fly() const {
         if (canFly)
@@ -73,33 +76,34 @@ public:
     }
 };
 
-// 🧠 Множественное наследование
+
 class FlyingCat : public Cat, public Bird {
 private:
-    int magicLevel;
+    int flightspeed;
     bool hasWings;
     double maxHeight;
 
 public:
     FlyingCat(const std::string& n, int a, double w,
-              const std::string& c, int l, bool lazy,
-              double ws, bool fly, const std::string& h,
-              int magic, bool wings, double height)
-        : Animal(n, "Летающий кот", a, w), // ОБЯЗАТЕЛЬНО!
-          Cat(n, a, w, c, l, lazy),
-          Bird(n, a, w, ws, fly, h),
-          magicLevel(magic), hasWings(wings), maxHeight(height) {}
+        const std::string& c, int l, bool lazy,
+        double ws, bool fly, const std::string& h,
+        double speed , bool wings, double height)
+        : Animal(n, "Летающий кот", a, w), 
+        Cat(n, a, w, c, l, lazy),
+        Bird(n, a, w, ws, fly, h),
+        flightspeed(speed), hasWings(wings), maxHeight(height) {
+    }
 
-    void castSpell() const {
-        std::cout << name << " использует магию уровня " << magicLevel << std::endl;
+    void boostSpeed() const {
+        std::cout << name << " Ускоряется до " << flightspeed << "км/ч." << std::endl;
     }
 
     void flyHigh() const {
-        std::cout << name << " взлетает на высоту " << maxHeight << " метров." << std::endl;
+        std::cout << name << " Взлетает на высоту " << maxHeight << " метров." << std::endl;
     }
 
     void showWings() const {
-        std::cout << name << (hasWings ? " имеет крылья." : " без крыльев.") << std::endl;
+        std::cout << name << (hasWings ? " Имеет крылья." : " Без крыльев.") << std::endl;
     }
 
     void makeSound() const override {
@@ -111,7 +115,7 @@ public:
         std::cout << "Цвет: " << color << std::endl;
         std::cout << "Жизни: " << lives << std::endl;
         std::cout << "Размах крыльев: " << wingSpan << std::endl;
-        std::cout << "Магия: " << magicLevel << std::endl;
+        std::cout << "Скорость полёта: " << flightspeed << std::endl;
         std::cout << "Макс высота: " << maxHeight << std::endl;
     }
 };
@@ -120,20 +124,28 @@ int main() {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
-    FlyingCat fc("СуперМурзик", 4, 5.5,
-                 "Черный", 9, false,
-                 0.8, true, "Горы",
-                 10, true, 100.0);
+    FlyingCat fc(
+        "КрылатыйТиша",
+        4,
+        5.5,
+        "Черный", 
+        9,
+        false,
+        0.8, 
+        true,
+        "Горы",
+        80, 
+        true,
+        100.0);
 
     fc.printInfo();
     std::cout << std::endl;
 
     fc.makeSound();
     fc.fly();
-    fc.castSpell();
+    fc.boostSpeed();
     fc.flyHigh();
     fc.showWings();
 
     return 0;
-}
 }
